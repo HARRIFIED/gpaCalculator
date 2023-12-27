@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     ScrollView,
@@ -29,7 +29,8 @@ export default function Main() {
         <ScrollView>
             <Portal>
                 <Appbar.Header>
-                    <Appbar.Content title={`Your GPA is               ${getGPA() == 5.0 || 4.0 || 3.0 || 2.0 || 1.0 || 0.0 ? getGPA().toFixed(1) : getGPA()}`} />
+                    {/* <Appbar.Content title={`Your GPA is ${formattedGPA}`} />; */}
+                    <Appbar.Content title={`Your GPA is               ${[5.0, 4.0, 3.0, 2.0, 1.0, 0.0].includes(getGPA()) ? getGPA().toFixed(1) : getGPA()}`} />
                 </Appbar.Header>
             </Portal>
             <Portal>
@@ -47,6 +48,16 @@ export default function Main() {
                             },
                         ])
                     }
+                />
+            </Portal>
+            <Portal>
+                <FAB
+                    icon="download"
+                    style={styles.fab3}
+                    onPress={() =>
+                        alert("PDF download  feature coming soon")
+                    }
+
                 />
             </Portal>
             <Portal>
@@ -75,7 +86,6 @@ export default function Main() {
                             paddingBottom: 10
                         }}>
                             <TextInput
-                                // mode='outlined'
                                 placeholder="COURSE"
                                 value={d.COURSE}
                                 style={{
@@ -102,7 +112,6 @@ export default function Main() {
                                 }
                             />
                             <TextInput
-                                // mode='outlined'
                                 value={d.GRADE}
                                 placeholder="GRADE"
                                 style={{
@@ -129,7 +138,6 @@ export default function Main() {
                                 }
                             />
                             <TextInput
-                                // mode='outlined'
                                 value={d.CREDIT}
                                 placeholder="CREDIT"
                                 style={{
@@ -169,17 +177,19 @@ export default function Main() {
 const styles = StyleSheet.create({
     fab: {
         position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
+        // margin: 16,
+        right: 10,
+        bottom: 16,
     },
     fab2: {
         position: 'absolute',
-        margin: 16,
-        left: 0,
-        bottom: 0,
+        // margin: 16,
+        left: 10,
+        bottom: 16,
     },
     fab3: {
-
+        position: "absolute",
+        bottom: 16,
+        right: '40%',
     }
 })
