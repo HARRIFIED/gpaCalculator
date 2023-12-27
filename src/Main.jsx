@@ -13,78 +13,23 @@ import {
     // TextInput
 } from 'react-native-paper';
 import uuid from "react-native-uuid";
-
+import { getTotalCredit, get_All_GRADE_X_CREDIT } from './usefulFunc';
 
 
 export default function Main() {
     const theme = useTheme();
     const [field, setField] = useState([
         { id: uuid.v4(), COURSE: "", GRADE: "", CREDIT: "" },
-        // { id: uuid.v4(), COURSE: "", GRADE: "", CREDIT: "" },
+        { id: uuid.v4(), COURSE: "", GRADE: "", CREDIT: "" },
     ]);
 
-    const [length, setLength] = useState(field.length == 2)
-
-    function getTotalCredit() {
-        const totalCredits = field.reduce(
-            (total, data) => total + parseInt(data.CREDIT),
-            0
-        );
-        return totalCredits;
-    }
-
-    function getPoints(points) {
-        switch (points) {
-            case "A":
-                return 5.0;
-            case "a":
-                return 5.0;
-
-            case "B":
-                return 4.0;
-            case "b":
-                return 4.0;
-
-            case "C":
-                return 3.0;
-            case "c":
-                return 3.0;
-
-            case "D":
-                return 2.0;
-            case "d":
-                return 2.0;
-
-            case "E":
-                return 1.0;
-            case "e":
-                return 1.0;
-
-            case "F":
-                return 0.0;
-            case "f":
-                return 0.0;
-
-            default:
-                return 0.0;
-        }
-    }
-
-    function get_All_GRADE_X_CREDIT() {
-        const cal = field.reduce(
-            (total, data) => total + getPoints(data.GRADE) * parseInt(data.CREDIT),
-            0
-        );
-        return cal;
-    }
-
-    const getGPA = () => get_All_GRADE_X_CREDIT() / getTotalCredit() || "Calculating...."
+    const getGPA = () => get_All_GRADE_X_CREDIT(field) / getTotalCredit(field) || "Complete the boxes...."
 
     return (
         <ScrollView>
             <Portal>
                 <Appbar.Header>
-                    <Appbar.Content title={`Your GPA is             ${getGPA() == 5.0 ? getGPA().toFixed(1) : getGPA()}`} />
+                    <Appbar.Content title={`Your GPA is               ${getGPA() == 5.0 || 4.0 || 3.0 || 2.0 || 1.0 || 0.0 ? getGPA().toFixed(1) : getGPA()}`} />
                 </Appbar.Header>
             </Portal>
             <Portal>
@@ -109,31 +54,14 @@ export default function Main() {
                     icon="minus"
                     style={styles.fab2}
                     onPress={() =>
-                        setField((currentField) =>
-                            currentField.length > 1
-                                ? currentField.splice(-1, 1)
-                                : currentField
-                        )
+                        setField((currentField) => {
+                            return currentField.length > 2 ? [...currentField.slice(0, -1)] : currentField;
+                        })
                     }
+
                 />
             </Portal>
-            {/* <Portal>
-                <FAB
-                    icon="plus"
-                    style={styles.fab}
-                    onPress={() =>
-                        setField((currentField) => [
-                            ...currentField,
-                            {
-                                id: uuid.v4(),
-                                COURSE: "",
-                                GRADE: "",
-                                CREDIT: "",
-                            },
-                        ])
-                    }
-                />
-            </Portal> */}
+
             <View style={{ marginTop: 100 }}>
                 {field.map((d) => (
                     <View key={d.id} style={{}}>
