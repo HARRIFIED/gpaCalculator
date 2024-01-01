@@ -10,10 +10,12 @@ import {
     Appbar,
     FAB,
     Portal,
-    // TextInput
 } from 'react-native-paper';
 import uuid from "react-native-uuid";
 import { getTotalCredit, get_All_GRADE_X_CREDIT } from './usefulFunc';
+import * as Print from 'expo-print';
+import { shareAsync } from 'expo-sharing';
+
 
 
 export default function Main() {
@@ -24,6 +26,74 @@ export default function Main() {
     ]);
 
     const getGPA = () => get_All_GRADE_X_CREDIT(field) / getTotalCredit(field) || "Complete the boxes...."
+
+    var studentData = field
+
+    // We Generate table rows from data
+    var tableRows = studentData.map(student => {
+        return `<tr>
+                <td>${student.COURSE}</td>
+                <td>${student.GRADE}</td>
+                <td>${student.CREDIT}</td>
+            </tr>`
+    }).join('');
+
+    // HTML code
+    var htmlString = `<!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Student Information</title>
+                <style>
+                    table {
+                        width: 50%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                    }
+
+                    th, td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
+            </head>
+            <body style="text-align: center;">
+
+            <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: bold;">Student Information</h12>
+            <h2>Student GPA ${getGPA()} </h2>       
+            <table>
+            <thead>
+                <tr>
+                <th>Courses</th>
+                <th>Grades</th>
+                <th>Credits</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${tableRows} 
+            </tbody>
+            </table>
+
+            </body>
+        </html>`
+        ;
+
+    async function createPDF() {
+        const options = {
+            html: htmlString,
+            fileName: 'studentInfo',
+            directory: 'Documents',
+        };
+        const { uri } = await Print.printToFileAsync(options);
+        await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    }
+
 
     return (
         <ScrollView>
@@ -54,9 +124,7 @@ export default function Main() {
                 <FAB
                     icon="download"
                     style={styles.fab3}
-                    onPress={() =>
-                        alert("PDF download  feature coming soon")
-                    }
+                    onPress={createPDF}
 
                 />
             </Portal>
