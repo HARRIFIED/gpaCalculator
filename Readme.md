@@ -5,7 +5,7 @@ Codes are written in functional and class-based component which you could switch
 
 So Main.Js is written in functional component while MainClass.js in class component
 
-Advanced features like printing pdf containing courses and grades are added also currently which will be pushed in the next version
+Advanced features like printing pdf containing courses and grades are added 
 
 
 ![WhatsApp Image 2024-01-01 at 3 29 13 PM](https://github.com/HARRIFIED/gpaCalculator/assets/84249407/87852962-dfe7-4de1-9c45-5470b51e0382)
